@@ -4,6 +4,88 @@ O Transcriber é um aplicativo desktop de baixa latência para Windows que captu
 
 O design atual destina-se à transcrição quase em tempo real, mantendo o fluxo de captura independente da thread da interface e impedindo que o processamento do Whisper acumule áudio desatualizado.
 
+## Pré-requisitos
+
+### Para executar o Transcriber
+
+- **Windows 10 ou 11, 64 bits** — o projeto é um aplicativo WPF compilado para `win-x64`.
+- **[Voicemeeter](https://vb-audio.com/Voicemeeter/)** — fornece a saída virtual usada para capturar o áudio do Teams, Meet, Zoom ou de outros aplicativos.
+- **[.NET 8 Desktop Runtime para Windows x64](https://dotnet.microsoft.com/download/dotnet/8.0)** — necessário quando o aplicativo é distribuído como uma publicação dependente do framework. O SDK do .NET 8 já inclui esse runtime.
+- **Modelo Whisper `ggml-base.bin`** — arquivo de aproximadamente 148 MB usado para o reconhecimento local da fala.
+- Um dispositivo físico de saída, como headset ou alto-falantes, para monitorar o áudio. Um microfone só é necessário caso a própria voz também deva ser encaminhada ao Voicemeeter.
+
+O reconhecimento é executado localmente. A conexão com a internet é necessária somente para baixar os pré-requisitos, os pacotes e o modelo; ela não é necessária durante a transcrição.
+
+### Para compilar o projeto
+
+- **[SDK do .NET 8 para Windows x64](https://dotnet.microsoft.com/download/dotnet/8.0)**.
+- Opcionalmente, **Visual Studio 2022 17.8 ou posterior** com a carga de trabalho **Desenvolvimento para desktop com .NET**. Também é possível compilar somente com a CLI do .NET.
+- Git, caso o código seja obtido por clonagem do repositório.
+
+As dependências `NAudio`, `Whisper.net` e `Whisper.net.AllRuntimes` são restauradas automaticamente pelo NuGet durante a compilação. Não é necessário instalar um `whisper.exe` separado.
+
+## Instalação
+
+### 1. Instale o Voicemeeter
+
+1. Baixe o instalador no [site oficial da VB-Audio](https://vb-audio.com/Voicemeeter/).
+2. Execute o instalador como administrador.
+3. Reinicie o Windows após a instalação para que os dispositivos virtuais de áudio sejam registrados corretamente.
+4. Abra o Voicemeeter e selecione o headset ou os alto-falantes como saída física **A1**.
+5. Ative **B** ou **B1** no canal que recebe o áudio a ser transcrito. Isso encaminha o sinal para a saída virtual que será capturada pelo Transcriber.
+
+Após a instalação, o Windows normalmente apresenta o endpoint de captura como:
+
+```text
+Voicemeeter Output (VB-Audio Voicemeeter VAIO)
+```
+
+ou:
+
+```text
+Voicemeeter Out B1
+```
+
+### 2. Adicione o modelo Whisper
+
+O modelo não faz parte do repositório devido ao seu tamanho. Obtenha o modelo GGML Base compatível com o [Whisper.net](https://github.com/sandrohanea/whisper.net) e salve-o exatamente como:
+
+```text
+<diretório do executável do Transcriber>\Models\ggml-base.bin
+```
+
+Ao executar diretamente pelo Visual Studio ou pela CLI, o caminho normalmente será semelhante a:
+
+```text
+bin\Release\net8.0-windows\win-x64\Models\ggml-base.bin
+```
+
+Se o modelo estiver ausente ou com outro nome, o aplicativo exibirá a mensagem `Model not found` e não iniciará a captura.
+
+### 3. Compile e execute a partir do código-fonte
+
+Na pasta do projeto, execute:
+
+```powershell
+dotnet restore
+dotnet build InterviewTranscriberV5.sln --configuration Release
+```
+
+Depois de colocar o modelo na pasta `Models` ao lado do executável gerado, execute:
+
+```powershell
+dotnet run --project InterviewTranscriberV5.csproj --configuration Release
+```
+
+### 4. Selecione a captura no Transcriber
+
+1. Abra o Transcriber depois de iniciar o Voicemeeter.
+2. Selecione `Voicemeeter Output` ou `Voicemeeter Out B1` no campo **Capture**.
+3. Use a configuração recomendada descrita a seguir.
+4. Clique em **Start** e reproduza algum áudio encaminhado para **B/B1**.
+
+Se nenhum endpoint aparecer, confirme que o Voicemeeter foi instalado, reinicie o Windows e use o botão **Refresh** do Transcriber.
+
 ## Configuração recomendada
 
 A configuração abaixo apresentou o melhor resultado prático até o momento:
