@@ -43,6 +43,10 @@ ScaffoldingReadMe.txt
 ~$*
 *~
 CodeCoverage/
+.vs/
+
+# Local Whisper models (large binary files)
+Models/*.bin
 
 # MSBuild Binary and Structured Log
 *.binlog

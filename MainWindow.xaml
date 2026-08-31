@@ -1,0 +1,182 @@
+<Window x:Class="InterviewTranscriberV5.MainWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Title="Transcriber V5"
+ Width="1498"
+ Height="897"
+ MinWidth="980"
+ MinHeight="600">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Transcriber V5"
+              FontSize="25"
+              FontWeight="SemiBold"/>
+            <TextBlock Text="Low-latency rolling transcription: Voicemeeter Virtual Out → VAD → latest-only Whisper queue"
+              Foreground="Gray"
+              Margin="0,4,0,12"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="390"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="105"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="125"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Capture:"
+              VerticalAlignment="Center"
+              Margin="0,0,8,0"/>
+
+            <ComboBox x:Name="DeviceCombo"
+             Grid.Column="1"
+             DisplayMemberPath="DisplayName"
+             SelectionChanged="DeviceCombo_SelectionChanged"/>
+
+            <TextBlock Text="Context:"
+              Grid.Column="2"
+              VerticalAlignment="Center"
+              Margin="14,0,6,0"/>
+
+            <ComboBox x:Name="ContextCombo"
+             Grid.Column="3"
+             SelectedIndex="1">
+                <ComboBoxItem Content="0.75 s"/>
+                <ComboBoxItem Content="1.0 s"/>
+                <ComboBoxItem Content="1.25 s"/>
+                <ComboBoxItem Content="1.5 s"/>
+                <ComboBoxItem Content="2.0 s"/>
+            </ComboBox>
+
+            <TextBlock Text="Update:"
+              Grid.Column="4"
+              VerticalAlignment="Center"
+              Margin="14,0,6,0"/>
+
+            <ComboBox x:Name="UpdateCombo"
+             Grid.Column="5"
+             SelectedIndex="1">
+                <ComboBoxItem Content="0.35 s"/>
+                <ComboBoxItem Content="0.50 s"/>
+                <ComboBoxItem Content="0.75 s"/>
+            </ComboBox>
+
+            <TextBlock Text="VAD:"
+              Grid.Column="6"
+              VerticalAlignment="Center"
+              Margin="14,0,6,0"/>
+
+            <ComboBox x:Name="VadCombo"
+             Grid.Column="7"
+             SelectedIndex="0">
+                <ComboBoxItem Content="Enabled"/>
+                <ComboBoxItem Content="Disabled"/>
+            </ComboBox>
+
+            <TextBlock Text="Silence:"
+              Grid.Column="8"
+              VerticalAlignment="Center"
+              Margin="14,0,6,0"/>
+
+            <ComboBox x:Name="SilenceCombo"
+             Grid.Column="9"
+             SelectedIndex="2"
+             Width="110">
+                <ComboBoxItem Content="250 ms"/>
+                <ComboBoxItem Content="350 ms"/>
+                <ComboBoxItem Content="500 ms"/>
+                <ComboBoxItem Content="750 ms"/>
+                <ComboBoxItem Content="1000 ms"/>
+                <ComboBoxItem Content="1500 ms"/>
+            </ComboBox>
+
+            <StackPanel Grid.Column="10"
+               Orientation="Horizontal"
+               HorizontalAlignment="Right">
+                <Button x:Name="RefreshButton"
+            Content="Refresh"
+            Padding="12,6"
+            Margin="6,0"
+            Click="RefreshButton_Click"/>
+
+                <Button x:Name="ClearButton"
+            Content="Clear"
+            Width="80"
+            Padding="12,6"
+            Margin="6,0"
+            Click="ClearButton_Click"/>
+
+                <Button x:Name="StartButton"
+            Content="Start"
+            Width="90"
+            Padding="12,6"
+            Click="StartButton_Click"/>
+
+                <Button x:Name="StopButton"
+            Content="Stop"
+            Width="90"
+            Padding="12,6"
+            Margin="8,0,0,0"
+            IsEnabled="False"
+            Click="StopButton_Click"/>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="2"
+          Background="#F2F2F2"
+          Padding="8"
+          Margin="0,0,0,8">
+            <TextBlock x:Name="SelectedDeviceText"
+              Text="Capture device: not selected"
+              FontFamily="Consolas"
+              TextWrapping="Wrap"/>
+        </Border>
+
+        <RichTextBox x:Name="TranscriptBox"
+               Grid.Row="3"
+               IsReadOnly="True"
+               VerticalScrollBarVisibility="Auto"
+               FontFamily="Consolas"
+               FontSize="16"
+               Padding="12"/>
+
+        <StatusBar Grid.Row="4"
+             Margin="0,12,0,0">
+            <StatusBarItem>
+                <TextBlock x:Name="StatusText" Text="Ready"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="LevelText" Text="Audio: --"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="VadText" Text="VAD: --"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="LatencyText" Text="STT: --"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="QueueText" Text="Queue: --"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
