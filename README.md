@@ -300,41 +300,6 @@ O áudio é convertido para mono e reamostrado para:
 
 antes de ser preparado para o Whisper.
 
-## Observações sobre compilação
-
-O código que usa `File`, `Path`, `Directory`, `MemoryStream` e APIs relacionadas deve incluir:
-
-```csharp
-using System.IO;
-```
-
-`TranscriptionJob` define a propriedade final com esta combinação exata de maiúsculas e minúsculas:
-
-```csharp
-bool IsFinal
-```
-
-Com argumentos nomeados, a sintaxe correta é:
-
-```csharp
-new TranscriptionJob(
-    snapshot,
-    sequence,
-    IsFinal: true);
-```
-
-Não use `isFinal:`.
-
-## Nome do aplicativo
-
-O nome do aplicativo é:
-
-```text
-Transcriber
-```
-
-Esse nome deve ser usado consistentemente no título, no cabeçalho principal e em outras referências voltadas ao usuário. Nomes antigos como `Interview Transcriber` não devem ser introduzidos em futuras revisões.
-
 ## Resumo da configuração recomendada atual
 
 ```text
